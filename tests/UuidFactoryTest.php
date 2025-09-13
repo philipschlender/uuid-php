@@ -22,7 +22,7 @@ class UuidFactoryTest extends TestCase
              */
             public function createUuid(): UuidInterface
             {
-                $bytes = hex2bin('6a7cb592f7a44739b1fadc78c09bd76d');
+                $bytes = hex2bin('00000000000000000000000000000000');
 
                 if (!is_string($bytes)) {
                     throw new UuidException('Failed to convert the hexadecimal string to its binary representation.');
