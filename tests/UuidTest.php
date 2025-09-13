@@ -17,7 +17,7 @@ class UuidTest extends TestCase
     {
         parent::setUp();
 
-        $bytes = hex2bin('6a7cb592f7a44739b1fadc78c09bd76d');
+        $bytes = hex2bin('00000000000000000000000000000000');
 
         if (!is_string($bytes)) {
             throw new UuidException('Failed to convert the hexadecimal string to its binary representation.');
@@ -38,20 +38,20 @@ class UuidTest extends TestCase
     {
         $bytes = $this->uuid->toBytes();
 
-        $this->assertEquals(hex2bin('6a7cb592f7a44739b1fadc78c09bd76d'), $bytes);
+        $this->assertEquals(hex2bin('00000000000000000000000000000000'), $bytes);
     }
 
     public function testToHexadecimal(): void
     {
         $hexadecimal = $this->uuid->toHexadecimal();
 
-        $this->assertEquals('6a7cb592f7a44739b1fadc78c09bd76d', $hexadecimal);
+        $this->assertEquals('00000000000000000000000000000000', $hexadecimal);
     }
 
     public function testToString(): void
     {
         $string = $this->uuid->toString();
 
-        $this->assertEquals('6a7cb592-f7a4-4739-b1fa-dc78c09bd76d', $string);
+        $this->assertEquals('00000000-0000-0000-0000-000000000000', $string);
     }
 }

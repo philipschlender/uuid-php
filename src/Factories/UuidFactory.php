@@ -6,28 +6,12 @@ use Uuid\Exceptions\UuidException;
 use Uuid\Models\Uuid;
 use Uuid\Models\UuidInterface;
 
-class UuidFactory implements UuidFactoryInterface
+abstract class UuidFactory implements UuidFactoryInterface
 {
     /**
      * @throws UuidException
      */
-    public function createUuidV4(): UuidInterface
-    {
-        $bytes = random_bytes(16);
-
-        $data = unpack('n*', $bytes);
-
-        if (!is_array($data)) {
-            throw new UuidException('Failed to unpack the data from the binary string.');
-        }
-
-        $data[4] = $data[4] & 0x0FFF | 0x4000;
-        $data[5] = $data[5] & 0x3FFF | 0x8000;
-
-        $bytes = pack('n*', ...$data);
-
-        return $this->createUuidFromBytes($bytes);
-    }
+    abstract public function createUuid(): UuidInterface;
 
     /**
      * @throws UuidException
