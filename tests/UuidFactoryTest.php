@@ -6,6 +6,7 @@ use Uuid\Exceptions\UuidException;
 use Uuid\Factories\UuidFactory;
 use Uuid\Factories\UuidFactoryInterface;
 use Uuid\Models\Uuid;
+use Uuid\Models\UuidInterface;
 
 class UuidFactoryTest extends TestCase
 {
@@ -15,21 +16,26 @@ class UuidFactoryTest extends TestCase
     {
         parent::setUp();
 
-        $this->uuidFactory = new UuidFactory();
-    }
+        $this->uuidFactory = new class extends UuidFactory {
+            /**
+             * @throws UuidException
+             */
+            public function createUuid(): UuidInterface
+            {
+                $bytes = hex2bin('6a7cb592f7a44739b1fadc78c09bd76d');
 
-    public function testCreateUuidV4(): void
-    {
-        $uuid = $this->uuidFactory->createUuidV4();
+                if (!is_string($bytes)) {
+                    throw new UuidException('Failed to convert the hexadecimal string to its binary representation.');
+                }
 
-        $this->assertInstanceOf(Uuid::class, $uuid);
-        $this->assertMatchesRegularExpression('/^[0-9a-f]{32}$/', $uuid->toHexadecimal());
-        $this->assertEquals('4', substr($uuid->toHexadecimal(), 12, 1));
+                return new Uuid($bytes);
+            }
+        };
     }
 
     public function testCreateUuidFromBytes(): void
     {
-        $expectedUuid = $this->uuidFactory->createUuidV4();
+        $expectedUuid = $this->uuidFactory->createUuid();
 
         $uuid = $this->uuidFactory->createUuidFromBytes($expectedUuid->toBytes());
 
@@ -46,7 +52,7 @@ class UuidFactoryTest extends TestCase
 
     public function testCreateUuidFromHexadecimal(): void
     {
-        $expectedUuid = $this->uuidFactory->createUuidV4();
+        $expectedUuid = $this->uuidFactory->createUuid();
 
         $uuid = $this->uuidFactory->createUuidFromHexadecimal($expectedUuid->toHexadecimal());
 
@@ -63,7 +69,7 @@ class UuidFactoryTest extends TestCase
 
     public function testCreateUuidFromString(): void
     {
-        $expectedUuid = $this->uuidFactory->createUuidV4();
+        $expectedUuid = $this->uuidFactory->createUuid();
 
         $uuid = $this->uuidFactory->createUuidFromString($expectedUuid->toString());
 

@@ -10,7 +10,7 @@ interface UuidFactoryInterface
     /**
      * @throws UuidException
      */
-    public function createUuidV4(): UuidInterface;
+    public function createUuid(): UuidInterface;
 
     /**
      * @throws UuidException
